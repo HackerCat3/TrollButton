@@ -30,6 +30,8 @@ function showSurprise() {
         level += 1;
         maxHp = Math.floor(maxHp * 1.2); // Increase max HP for next level
         hp = maxHp; // restore HP for new boss
+        clickCount = 0; // Reset anger for new boss
+        myButton.onmouseover = null; // Stop teleporting on next boss
         alert("You defeated the boss! You earned $" + reward + " and advanced to level " + level + "!");
     }
 
