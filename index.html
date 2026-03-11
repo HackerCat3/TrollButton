@@ -1,86 +1,108 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <style>
-            body {
-                background-color: #d3ffcd;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                height: 100vh;
-                margin: 0;
-            }
+let hp = 20;          // Lowered to 20 so it's easier to test!
+let maxHp = 20;
+let money = 0;
+let level = 1;
+let clickPower = 1;
+let clickCount = 0;
 
-            title {
-                color: #7c5eff;
-                font-size: 24px;
+const myButton = document.getElementById("dabutton");
+let boingSound = new Audio("pop.mp3");
 
-            }
-            h1 {
-                color: #aa6060;
-                font-size: 36px;
-            }
-            p {
-                color: #598531;
-                font-size: 18px;
+function showSurprise() {
+    let damageDealt = clickPower;
 
-            }
-             #dabutton {
-                background-color: #5e8cff;
-                color: rgb(231, 255, 233);
-                border: dotted;
-                border-color: rgb(255, 221, 239);
-                padding: 30px 60px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 16px;
-                border-radius: 12px;
-                margin: 4px 2px;
-                cursor: pointer;
-                transition: all 0.7s ease;
-                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-            }
-                #dabutton:hover {
-                    background-color: #4a75e6;
-                    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
-                    transform: scale(1.05);
-                }
-                #dabutton:active {
-                    transform: scale(0.95);
-                }
-                @keyframes shake {
-                    0% { transform: translate(1px, 1px) rotate(0deg); }
-                    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-                    20% { transform: translate(-3px, 0px) rotate(1deg); }
-                    30% { transform: translate(3px, 2px) rotate(0deg); }
-                    40% { transform: translate(1px, -1px) rotate(1deg); }
-                    50% { transform: translate(-1px, 2px) rotate(-1deg); }
-                    60% { transform: translate(-3px, 1px) rotate(0deg); }
-                    70% { transform: translate(3px, 1px) rotate(-1deg); }
-                    80% { transform: translate(-1px, -1px) rotate(1deg); }
-                    90% { transform: translate(1px, 2px) rotate(0deg); }
-                    100% { transform: translate(1px, -2px) rotate(-1deg); }
-                }
-                 body.shake {
-                    animation: shake 0.5s;
-                    animation-iteration-count: infinite;
-                }
-            </style>
-        <title>Thing</title>
-        <script src="script.js" defer></script>
-    </head>
-    <body>
-        <center>
-        <h1>Thing</h1>
-        <p>This is a thing.</p>
-        <p>💰 Money:$ <span id="money">0</span></p>
-        <p>⚔️ Boss HP: <span id="hp">100</span></p>
-        <p>📈 Level: <span id="level">1</span></p>
-        </center>
-        <button id="dabutton">Click me!</button>
-    </body>
-</html>
+    // 1. CRITICAL HIT LOGIC (The "Fence" Fix)
+    // We use { } to group the actions together so the 'else' doesn't break.
+    if (Math.random() < 0.2) { 
+        damageDealt = clickPower * 5; 
+        myButton.innerHTML = "CRITICAL HIT!";
+        myButton.style.backgroundColor = "#ffffff"; 
+    } else {
+        damageDealt = clickPower;
+        myButton.innerHTML = "Click me!";
+        // Reset color based on clickCount so it doesn't stay white
+        updateButtonColor(); 
+    }
 
+    // 2. APPLY DAMAGE
+    hp -= damageDealt;
+
+    // 3. CHECK FOR BOSS DEFEAT
+    if (hp <= 0) {
+        let reward = level * 10;
+        money += reward;
+        level += 1;
+        maxHp = Math.floor(maxHp * 1.2); // Next boss gets 20% more HP
+        hp = maxHp; 
+        alert(`You defeated the boss! You earned $${reward} and advanced to level ${level}!`);
+    }
+
+    // 4. UPDATE THE HTML SCREEN
+    // This talks to your <span> tags in the HTML
+    document.getElementById("money").innerText = money;
+    document.getElementById("hp").innerText = hp;
+    document.getElementById("level").innerText = level;
+
+    // 5. HIT ANIMATION
+    myButton.style.transform = "scale(0.9)";
+    setTimeout(() => {
+        myButton.style.transform = "scale(1)";
+    }, 50);
+
+    // 6. ANGER & TROLL LOGIC
+    clickCount += 1;
+    handleAnger();
+}
+
+// This helper keeps the button colors correct
+function updateButtonColor() {
+    if (clickCount === 1) myButton.style.backgroundColor = "#ffd45a";
+    else if (clickCount === 2) myButton.style.backgroundColor = "#FFA95A";
+    else if (clickCount >= 3) myButton.style.backgroundColor = "#FF8B5A";
+    else myButton.style.backgroundColor = "#5e8cff";
+}
+
+function handleAnger() {
+    if (clickCount === 1) {
+        alert("Stop clicking me!");
+    } else if (clickCount === 2) {
+        alert("I said stop clicking me!");
+    } else if (clickCount === 3) {
+        document.body.classList.add("shake");
+        myButton.onmouseover = teleport;
+        alert("TRY AND CATCH ME!");
+    } else if (clickCount === 5) {
+        alert("GRRR... I'm LEAVING!");
+        myButton.style.display = "none";
+        createResetBtn();
+    }
+}
+
+function teleport() {
+    let x = Math.random() * (window.innerWidth - 200);
+    let y = Math.random() * (window.innerHeight - 200);
+    myButton.style.position = "absolute";
+    myButton.style.left = x + "px";
+    myButton.style.top = y + "px";
+}
+
+function createResetBtn() {
+    let resetBtn = document.createElement("button");
+    resetBtn.innerHTML = "Come back!!!";
+    resetBtn.style.cssText = "padding:20px; background:#de83ff; color:white; border-radius:12px; cursor:pointer; margin-top:20px;";
+    
+    resetBtn.onclick = function() {
+        clickCount = 0;
+        myButton.onmouseover = null;
+        myButton.style.position = "static";
+        myButton.style.display = "inline-block";
+        myButton.style.backgroundColor = "#5e8cff";
+        myButton.innerHTML = "Click me!";
+        document.body.style.backgroundColor = "#d3ffcd";
+        document.body.classList.remove("shake");
+        resetBtn.remove();
+    };
+    document.body.appendChild(resetBtn);
+}
+
+myButton.onclick = showSurprise;
