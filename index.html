@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <style>
+            body {
+                background-color: #d3ffcd;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                margin: 0;
+            }
+
+            title {
+                color: #7c5eff;
+                font-size: 24px;
+
+            }
+            h1 {
+                color: #aa6060;
+                font-size: 36px;
+            }
+            p {
+                color: #598531;
+                font-size: 18px;
+
+            }
+             #dabutton {
+                background-color: #5e8cff;
+                color: rgb(231, 255, 233);
+                border: dotted;
+                border-color: rgb(255, 221, 239);
+                padding: 30px 60px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                border-radius: 12px;
+                margin: 4px 2px;
+                cursor: pointer;
+                transition: all 0.7s ease;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            }
+                #dabutton:hover {
+                    background-color: #4a75e6;
+                    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+                    transform: scale(1.05);
+                }
+                #dabutton:active {
+                    transform: scale(0.95);
+                }
+                @keyframes shake {
+                    0% { transform: translate(1px, 1px) rotate(0deg); }
+                    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+                    20% { transform: translate(-3px, 0px) rotate(1deg); }
+                    30% { transform: translate(3px, 2px) rotate(0deg); }
+                    40% { transform: translate(1px, -1px) rotate(1deg); }
+                    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+                    60% { transform: translate(-3px, 1px) rotate(0deg); }
+                    70% { transform: translate(3px, 1px) rotate(-1deg); }
+                    80% { transform: translate(-1px, -1px) rotate(1deg); }
+                    90% { transform: translate(1px, 2px) rotate(0deg); }
+                    100% { transform: translate(1px, -2px) rotate(-1deg); }
+                }
+                 body.shake {
+                    animation: shake 0.5s;
+                    animation-iteration-count: infinite;
+                }
+            </style>
+        <title>Thing</title>
+        <script src="thing.js" defer></script>
+    </head>
+    <body>
+        <center>
+        <h1>Thing</h1>
+        <p>This is a thing.</p>
+        <p>💰 Money:$ <span id="money">0</span></p>
+        <p>⚔️ Boss HP: <span id="hp">100</span></p>
+        <p>📈 Level: <span id="level">1</span></p>
+        </center>
+        <button id="dabutton">Click me!</button>
+    </body>
+</html>
